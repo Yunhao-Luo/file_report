@@ -1,0 +1,60 @@
+Time,Elapsed,Prescribed Time,Source,Name
+2022-07-12 13:12:54,0,,Instructor,Session Start
+2022-07-12 13:13:07,13,4,Marker,START Care Under Fire
+2022-07-12 13:13:12,18,5,Marker,"CUF 1a. Direct casualty: return fire, move to cover"
+2022-07-12 13:13:16,22,6,Marker,CUF 1b. Direct casualty to apply self aid if possible
+2022-07-12 13:13:20,26,4,Marker,CUF 2a. Move past the casualty with security and return fire
+2022-07-12 13:13:24,30,5,Marker,"CUF 2b. Evaluator will state ""Enemy fire is suppressed"""
+2022-07-12 13:13:29,35,6,Marker,CUF 3a. Move to casualty. leave security in defensive position
+2022-07-12 13:13:33,39,4,Marker,CUF 3b. Conduct a visual blood sweep
+2022-07-12 13:13:38,44,5,Marker,"CUF 3c. Casualties extracted from burning vehicles and moved to
+relative safety."
+2022-07-12 13:13:42,48,6,Marker,CUF 3d. Do what is necessary to stop the burning process
+2022-07-12 13:13:46,52,4,Marker,START M - Massive Hemorrhage
+2022-07-12 13:13:51,57,5,Marker,M 4. Treat life-threatening extremity bleed
+2022-07-12 13:13:54,60,6,Marker,M 5. Move casualty to cover
+2022-07-12 13:13:59,65,4,Marker,M 6. Establish a secure perimeter
+2022-07-12 13:14:03,69,5,Marker,START Tactical Field Care Phase (Primary Assessment)
+2022-07-12 13:14:07,73,6,Marker,PA 1a. Reassess interventions
+2022-07-12 13:14:11,77,4,Marker,PA 1b. Check for signs of life
+2022-07-12 13:14:15,81,5,Marker,PA 2. Observe for any amputations or obvious extremity bleed
+2022-07-12 13:14:19,85,6,Marker,START A - Airway
+2022-07-12 13:14:23,89,4,Marker,A 3a. Assess A
+2022-07-12 13:14:28,94,5,Marker,A 3b. Assess V
+2022-07-12 13:14:32,98,6,Marker,A 3c. Assess P
+2022-07-12 13:14:36,102,4,Marker,A 3d. Assess U
+2022-07-12 13:14:40,106,5,Marker,"A 3e. If unconscious w/o obstruction, open and assess"
+2022-07-12 13:14:45,111,6,Marker,A 3f. Position casualty to maintain open airway
+2022-07-12 13:14:49,115,4,Marker,A 3g. Insert adjunct as indicated and secure
+2022-07-12 13:14:52,118,5,Marker,START R - Respiration
+2022-07-12 13:14:57,123,6,Marker,R 4a. Remove Casualty's equipment (IBA)
+2022-07-12 13:15:01,127,4,Marker,"R 4b. If  injuries permit, position casualty to facilitate respiratory "
+2022-07-12 13:15:04,130,5,Marker,R 5. Assess breathing
+2022-07-12 13:15:09,135,6,Marker,START C - Circulation
+2022-07-12 13:15:13,139,4,Marker,C 6. Check radial pulse
+2022-07-12 13:15:18,144,5,Marker,C 7. Wrap any junctional wounds
+2022-07-12 13:15:22,148,6,Marker,C 8. Notify the Tactical Leader for evacuation
+2022-07-12 13:15:26,152,4,Marker,START Tac Leader notifies Medic of MEDEVAC ETA
+2022-07-12 13:15:31,157,5,Marker,START H - Hypothermia/Head Injury
+2022-07-12 13:15:36,162,6,Marker,H 9. Prepare casualty for transport to HLZ
+2022-07-12 13:15:40,166,4,Marker,H 10. Reassess MARCH
+2022-07-12 13:15:44,170,5,Marker,H 11. Check for drug allergy b4 administration
+2022-07-12 13:15:48,174,6,Marker,H 12. Antibiotics
+2022-07-12 13:15:52,178,4,Marker,H 13. Ask Tac Leader for MEDEVAC ETA
+2022-07-12 13:15:57,183,5,Marker,START Detailed Phys. Exam (Secondary Assessment)
+2022-07-12 13:16:01,187,6,Marker,START Head Assessment
+2022-07-12 13:16:06,192,4,Marker,HA 14a. Inspect for DCAP-BTLS
+2022-07-12 13:16:10,196,5,Marker,HA 14b. Inspect eyes for PERRL
+2022-07-12 13:16:15,201,6,Marker,"HA 14c. Inspect Mouth, Nose, Ears"
+2022-07-12 13:16:18,204,4,Marker,HA 14*. Manage Injuries Appropriately
+2022-07-12 13:16:22,208,5,Marker,START Neck Assessment
+2022-07-12 13:16:26,212,6,Marker,NA 15a. Inspect for DCASP-BTLS
+2022-07-12 13:16:30,216,4,Marker,NA 15b. Palpate cervical spine
+2022-07-12 13:16:34,220,5,Marker,NA 15c. Check position of Trachia
+2022-07-12 13:16:38,224,6,Marker,NA 15d. Check Jugular Veins
+2022-07-12 13:16:42,228,4,Marker,NA 15*. Manage any injuries appropriately
+2022-07-12 13:16:46,232,5,Marker,START Chest Assessment
+2022-07-12 13:16:50,236,6,Marker,CA 16a. Inspect for DCAP-BTLS and palpate for TIC
+2022-07-12 13:16:53,239,4,Marker,CA 16b. Auscultate bilaterally for lung sounds
+2022-07-12 13:16:59,245,5,Marker,CA 16*. Manage any injuries appropriately
+2022-07-12 13:17:05,251,,Instructor,Session Stop
