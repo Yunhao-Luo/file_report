@@ -51,13 +51,16 @@ class DataReport:
             for line in file:
                 name = line["Name"].split(" ")[0]
                 name_content.append(name)
+            for i in range(0, len(name_content)-1):
+                if name_content[i] == name_content[i+1]:
+                    name_content[i] = ""
         return name_data
 
     def plot_normal_line(self):
         time_data = self.get_time()
         name_data = self.get_name()
-        fig, ax = plt.subplots(len(self.data),1)
-        levels = np.tile([-5, 5, -3, 3, -1, 1],
+        fig, ax = plt.subplots(len(self.data),1, figsize=(18,4))
+        levels = np.tile([1,1,1,1,1,1],
                  int(np.ceil(len(time_data[0])/6)))[:len(time_data[0])]
         for file_num in range(0,len(self.data)):
             time_list = time_data[file_num]
@@ -67,7 +70,7 @@ class DataReport:
                     color="k", markerfacecolor="w")  # Baseline and markers on it.
 
             # annotate lines
-            for d, l, r in zip(time_list, levels, name_data):
+            for d, l, r in zip(time_list, levels, name_list):
                 ax[file_num].annotate(r, xy=(d, l),
                             xytext=(-3, np.sign(l)*3), textcoords="offset points",
                             horizontalalignment="right",

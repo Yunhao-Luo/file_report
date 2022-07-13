@@ -1,54 +1,90 @@
+""" from datetime import datetime
+import matplotlib.pyplot as plt
+
+jobs = ['JOB1','JOB2','JOB3','JOB4']
+
+# input wait times
+waittimesin = ['03:20:50','04:45:10','06:10:40','05:30:30']
+# converting wait times to float
+waittimes = []
+for wt in waittimesin:
+    waittime = datetime.strptime(wt,'%H:%M:%S')
+    waittime = waittime.hour + waittime.minute/60 + waittime.second/3600
+    waittimes.append(waittime)
+
+# input run times
+runtimesin = ['00:20:50','01:00:10','00:30:40','00:10:30']
+# converting run times to float    
+runtimes = []
+for rt in runtimesin:
+    runtime = datetime.strptime(rt,'%H:%M:%S')
+    runtime = runtime.hour + runtime.minute/60 + runtime.second/3600
+    runtimes.append(runtime)
+
+fig = plt.figure()
+ax = fig.add_subplot(111)
+ax.barh(jobs, waittimes, align='center', height=.25, color='#00ff00',label='wait time')
+ax.barh(jobs, runtimes, align='center', height=.25, left=waittimes, color='g',label='run time')
+ax.set_yticks(jobs)
+ax.set_xlabel('Hour')
+ax.set_title('Run Time by Job')
+ax.grid(True)
+ax.legend()
+plt.tight_layout()
+#plt.savefig('C:\\Data\\stackedbar.png')
+plt.show() """
+
+""" 
+
 import matplotlib.pyplot as plt
 import numpy as np
-import matplotlib.dates as mdates
 
-dates = [22, 26, 31, 35, 39, 43, 47, 51, 61, 65, 70, 79, 83, 88, 96, 101, 106, 110, 115, 119, 124, 132, 136, 140, 150, 155, 160, 171, 176, 182, 186, 190, 204, 209, 213, 217, 225, 229, 232, 235, 238, 248, 253, 257]
-names = ['a', 'b', 'c', 'd', 'e', 'f']
+labels = ['G1', 'G2', 'G3', 'G4', 'G5']
+men_means = [0.2,0.3,0.1,0.05,0.1]
+women_means = [25, 32, 34, 20, 25]
+men_std = [0.5,0.5,0.5,0.5,0.5]
+women_std = [0.5,0.5,0.5,0.5,0.5]
+width = 0.35       # the width of the bars: can also be len(x) sequence
 
-# Choose some nice levels
-levels = np.tile([-5, 5, -3, 3, -1, 1],
-                 int(np.ceil(len(dates)/6)))[:len(dates)]
+fig, ax = plt.subplots(2,1)
+levels = np.tile([1,1,1,1,1,1],
+                 int(np.ceil(len(men_means)/6)))[:len(men_means)]
 
-# Create figure and plot a stem plot with the date
-fig, ax = plt.subplots(2,1)#(figsize=(8.8, 4), constrained_layout=True)
+ax[0].vlines(men_means, 0, levels, color="tab:red")  # The vertical stems.
+ax[0].plot(men_means, np.zeros_like(men_means), "-o",
+                    color="k", markerfacecolor="w")  # Baseline and markers on it.
+ax[1].barh(labels, men_means, width, yerr=men_std)
+ax[1].barh(labels, women_means, width, yerr=women_std)
 
-ax[0].vlines(dates, 0, levels, color="tab:red")  # The vertical stems.
-ax[0].plot(dates, np.zeros_like(dates), "-o",
-        color="k", markerfacecolor="w")  # Baseline and markers on it.
-
-# annotate lines
-for d, l, r in zip(dates, levels, names):
-    ax[0].annotate(r, xy=(d, l),
-                xytext=(-3, np.sign(l)*3), textcoords="offset points",
-                horizontalalignment="right",
-                verticalalignment="bottom" if l > 0 else "top")
-
-# remove y axis and spines
-ax[0].yaxis.set_visible(False)
 ax[0].xaxis.set_visible(False)
-ax[0].spines[["left", "top", "right"]].set_visible(False)
+ax[1].xaxis.set_visible(False)
 
-ax[0].margins(y=0.1)
+plt.show() """
 
-dates = [22, 26, 31, 35, 39, 43, 47, 51, 61, 65, 70, 79, 83, 88, 96, 101, 106, 110, 115, 119, 124, 132, 136, 140, 150, 155, 160, 171, 176, 182, 186, 190, 204, 209, 213, 217, 225, 229, 232, 235, 238, 248, 253, 257]
-names = ['a', 'b', 'c', 'd', 'e', 'f']
 
-ax[1].vlines(dates, 0, levels, color="tab:red")  # The vertical stems.
-ax[1].plot(dates, np.zeros_like(dates), "-o",
-        color="k", markerfacecolor="w")  # Baseline and markers on it.
+# importing package
+import matplotlib.pyplot as plt
+import numpy as np
 
-# annotate lines
-for d, l, r in zip(dates, levels, names):
-    ax[1].annotate(r, xy=(d, l),
-                xytext=(-3, np.sign(l)*3), textcoords="offset points",
-                horizontalalignment="right",
-                verticalalignment="bottom" if l > 0 else "top")
+fig, ax = plt.subplots(2,1)
+# create data
+x = ['A']
+y1 = 2 #np.array([10, 20, 10, 30])
+y2 = 4 #np.array([20, 25, 15, 25])
+y3 = 1 #np.array([12, 15, 19, 6])
+y4 = 7 #np.array([10, 29, 13, 19])
 
-# remove y axis and spines
+# plot bars in stack manner
+ax[0].barh(x, y1, color='r')
+ax[0].barh(x, y2, left=y1, color='b')
+ax[0].barh(x, y3, left=y1+y2, color='r')
+ax[0].barh(x, y4, left=y1+y2+y3, color='b')
+
+ax[1].barh(x, y1, color='r')
+ax[1].barh(x, y2, left=y1, color='b')
+ax[1].barh(x, y3, left=y1+y2, color='r')
+ax[1].barh(x, y4, left=y1+y2+y3, color='b')
 ax[1].yaxis.set_visible(False)
 ax[1].xaxis.set_visible(False)
 ax[1].spines[["left", "top", "right"]].set_visible(False)
-
-ax[1].margins(y=0.1)
-
 plt.show()
