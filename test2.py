@@ -61,6 +61,7 @@ ax[1].xaxis.set_visible(False)
 
 plt.show() """
 
+print(3%2)
 
 # importing package
 import matplotlib.pyplot as plt
@@ -86,5 +87,5 @@ ax[1].barh(x, y3, left=y1+y2, color='r')
 ax[1].barh(x, y4, left=y1+y2+y3, color='b')
 ax[1].yaxis.set_visible(False)
 ax[1].xaxis.set_visible(False)
-ax[1].spines[["left", "top", "right"]].set_visible(False)
+ax[1].spines[["left", "right"]].set_visible(False)
 plt.show()

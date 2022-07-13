@@ -1,5 +1,6 @@
 import os
 import csv
+from turtle import width
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.dates as mdates
@@ -8,12 +9,14 @@ class DataReport:
     def __init__(self, path):
         self.path = path
         self.data = []
+        self.file_names = []
 
     def read_files(self):
         os.chdir(self.path)
         for file in os.listdir():
             self.data.append([])
             file_content = self.data[-1]
+            self.file_names.append(file.split(" ")[0])
             with open(file) as csvfile:
                 content = csv.reader(csvfile, delimiter=',')
                 for row in content:
@@ -56,32 +59,63 @@ class DataReport:
                     name_content[i] = ""
         return name_data
 
+    def get_session_time(self):
+        pass
+        session_time_list = []
+        for file in self.data:
+            session_time_list.append([])
+            file_sessions = session_time_list[-1]
+            name = ""
+            for line in file:
+                if name != line["Name"].split(" ")[0]:
+                    file_sessions.append(line["Time"])
+                else:
+                    file_sessions[-1] += line["Time"]
+                name = line["Name"].split(" ")[0]
+        return session_time_list
+
     def plot_normal_line(self):
         time_data = self.get_time()
         name_data = self.get_name()
-        fig, ax = plt.subplots(len(self.data),1, figsize=(18,4))
+        fig, ax = plt.subplots(len(self.data)*2,1, figsize=(18,4))
         levels = np.tile([1,1,1,1,1,1],
                  int(np.ceil(len(time_data[0])/6)))[:len(time_data[0])]
-        for file_num in range(0,len(self.data)):
-            time_list = time_data[file_num]
-            name_list = name_data[file_num]
-            ax[file_num].vlines(time_list, 0, levels, color="tab:red")  # The vertical stems.
-            ax[file_num].plot(time_list, np.zeros_like(time_list), "-o",
-                    color="k", markerfacecolor="w")  # Baseline and markers on it.
+        session_time = self.get_session_time()
+        for file_num in range(0,len(self.data)*2):
+            if file_num % 2 == 0:
+                time_list = time_data[int(file_num/2)]
+                name_list = name_data[int(file_num/2)]
+                ax[file_num].vlines(time_list, 0, levels, color="tab:red")  # The vertical stems.
+                ax[file_num].plot(time_list, np.zeros_like(time_list), "-o",
+                        color="k", markerfacecolor="w")  # Baseline and markers on it.
 
-            # annotate lines
-            for d, l, r in zip(time_list, levels, name_list):
-                ax[file_num].annotate(r, xy=(d, l),
-                            xytext=(-3, np.sign(l)*3), textcoords="offset points",
-                            horizontalalignment="right",
-                            verticalalignment="bottom" if l > 0 else "top")
+                # annotate lines
+                for d, l, r in zip(time_list, levels, name_list):
+                    ax[file_num].annotate(r, xy=(d, l),
+                                xytext=(7, np.sign(l)-3), textcoords="offset points",
+                                horizontalalignment="right",
+                                verticalalignment="bottom" if l > 0 else "top")
 
-            # remove y axis and spines
-            ax[file_num].yaxis.set_visible(False)
-            ax[file_num].xaxis.set_visible(False)
-            ax[file_num].spines[["left", "top", "right"]].set_visible(False)
+                # remove y axis and spines
+                ax[file_num].yaxis.set_visible(False)
+                ax[file_num].xaxis.set_visible(False)
+                ax[file_num].spines[["left", "top", "right", "bottom"]].set_visible(False)
 
-            ax[file_num].margins(y=0.1)
+                ax[file_num].margins(y=0.1)
+            else:
+                # TO DO: fill bar with list of each sessions time
+                single_file_session = session_time[int(file_num/2)]
+                count = 0
+                for time in range(0, len(single_file_session)):
+                    if time%2 == 0:
+                        ax[file_num].barh(self.file_names[int(file_num/2)], single_file_session[time], left = count, color='b')
+                        count += int(single_file_session[time])
+                    else:
+                        ax[file_num].barh(self.file_names[int(file_num/2)], single_file_session[time], left = count, color='c')
+                        count += int(single_file_session[time])
+                ax[file_num].xaxis.set_visible(False)
+                ax[file_num].spines[["left", "top", "right", "bottom"]].set_visible(False)
+                ax[file_num].margins(y=0.1)
 
         plt.show()
 
@@ -97,7 +131,7 @@ if __name__ == "__main__":
         for line in file:
             print(line)
             pass """
-    res = test.get_time()
+    """ res = test.get_time()
     for i in res:
         print(len(i))
         print(i)
@@ -105,6 +139,15 @@ if __name__ == "__main__":
     res = test.get_name()
     for i in res:
         print(len(i))
-        print(i)
+        print(i) """
 
     test.plot_normal_line()
+
+    res = test.get_time()
+    for i in res:
+        print(i)
+
+    res = test.get_session_time()
+    print(res)
+    for file in res:
+        print(file)
