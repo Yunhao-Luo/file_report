@@ -1,9 +1,11 @@
 import os
 import csv
+from tkinter.tix import Tree
 from turtle import color, width
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.dates as mdates
+from matplotlib.backends.backend_pdf import PdfPages
 
 class DataReport:
     def __init__(self, path):
@@ -42,8 +44,11 @@ class DataReport:
         for file in self.data:
             time_data.append([])
             time_content = time_data[-1]
+            time_content.append(0)
+            total_time = 0
             for line in file:
-                time_content.append(int(line["Elasped"]) + int(line["Time"]))
+                time_content.append(int(line["Time"]) + total_time)
+                total_time+=int(line["Time"])
         return time_data
     
     def get_name(self):
@@ -99,10 +104,14 @@ class DataReport:
     def plot_normal_line(self):
         time_data = self.get_time()
         name_data = self.get_name()
-        fig, ax = plt.subplots(len(self.data)*2,1, figsize=(18,4))
+        for l in name_data:
+            l.insert(0, '')
+        fig, ax = plt.subplots(len(self.data)*2,1, figsize=(15,4))
         levels = np.tile([1,1,1,1,1,1],
                  int(np.ceil(len(time_data[0])/6)))[:len(time_data[0])]
         session_time = self.get_session_time()
+        print(session_time)
+        print(time_data)
         for file_num in range(0,len(self.data)*2):
             if file_num % 2 == 0:
                 time_list = time_data[int(file_num/2)]
@@ -123,7 +132,8 @@ class DataReport:
                 ax[file_num].xaxis.set_visible(False)
                 ax[file_num].spines[["left", "top", "right", "bottom"]].set_visible(False)
 
-                ax[file_num].margins(y=0.1)
+                ax[file_num].margins(y=0.5)
+                ax[file_num].margins(x=0)
             else:
                 single_file_session = session_time[int(file_num/2)]
                 count = 0
@@ -136,9 +146,10 @@ class DataReport:
                         count += int(single_file_session[time])
                 ax[file_num].xaxis.set_visible(False)
                 ax[file_num].spines[["left", "top", "right", "bottom"]].set_visible(False)
-                ax[file_num].margins(y=0.3)
-
-        plt.show()
+                ax[file_num].margins(y=0)
+                ax[file_num].margins(x=0)
+        export_pdf.savefig()
+        #plt.show()
     
     def get_individual_time(self, sub_name):
         res = []
@@ -153,19 +164,30 @@ class DataReport:
     def plot_detail(self):
         num_subsession = len(self.get_name()[0])
         subsession_name = self.get_subsessions()
-        fig, ax = plt.subplots(int(num_subsession/5),1, figsize=(8, 200))
-        for sub_sec in range(0, int(num_subsession/5)):
+        fig, ax = plt.subplots(int(num_subsession),1, figsize=(15, 100))
+        current_session = ""
+        color_change = False
+        for sub_sec in range(0, int(num_subsession)):
+            if current_session != subsession_name[sub_sec].split(" ")[0]:
+                color_change = not color_change
+            current_session = subsession_name[sub_sec].split(" ")[0]
             time_list = self.get_individual_time(subsession_name[sub_sec])
-            ax[sub_sec].barh(self.file_names, time_list)
+            if color_change:
+                ax[sub_sec].barh(self.file_names, time_list, color="b")
+            else:
+                ax[sub_sec].barh(self.file_names, time_list, color="c")
             prescribed_line = [int(self.get_prescribed(subsession_name[sub_sec]))]*len(self.file_names)
-            ax[sub_sec].plot(prescribed_line, self.file_names, color="r")
+            ax[sub_sec].plot(prescribed_line, self.file_names, color="r", linewidth=5)
             ax[sub_sec].set_title(subsession_name[sub_sec])
             ax[sub_sec].xaxis.set_visible(False)
             ax[sub_sec].margins(y=0.1)
             ax[sub_sec].xaxis.set_visible(False)
             ax[sub_sec].spines[["left", "top", "right", "bottom"]].set_visible(False)
-            ax[sub_sec].margins(y=0.3)
-        plt.show()
+            ax[sub_sec].margins(y=0.1)
+        """ plt.subplots_adjust(
+                    top=0.5) """
+        export_pdf.savefig()
+        #plt.show()
 
 
 
@@ -174,7 +196,6 @@ if __name__ == "__main__":
     path = os.getcwd() + "\sessionlogsforprismdatareportingproject"
     test = DataReport(path)
     test.read_files()
-    print("finish reading")
     """  for file in test.data:
         print("new file")
         for line in file:
@@ -212,5 +233,8 @@ if __name__ == "__main__":
     print(test.get_prescribed("CA 16*.")) """
     """ print(test.get_name())
     print(test.get_subsessions()) """
-    test.plot_normal_line()
-    test.plot_detail()
+    print(test.get_name())
+    with PdfPages(r'C:\Users\WorldViz.VIZBOX-03\Desktop\Charts.pdf') as export_pdf:
+        test.plot_normal_line()
+        test.plot_detail()
+    plt.close
