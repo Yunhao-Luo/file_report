@@ -67,7 +67,7 @@ class DataReport:
     def get_subsessions(self):
         session_data = []
         for line in self.data[0]:
-            name = line["Name"].split(" ")[0] + " " + line["Name"].split(" ")[1]
+            name = line["Name"]
             session_data.append(name)
         return session_data
 
@@ -110,8 +110,6 @@ class DataReport:
         levels = np.tile([1,1,1,1,1,1],
                  int(np.ceil(len(time_data[0])/6)))[:len(time_data[0])]
         session_time = self.get_session_time()
-        print(session_time)
-        print(time_data)
         for file_num in range(0,len(self.data)*2):
             if file_num % 2 == 0:
                 time_list = time_data[int(file_num/2)]
@@ -160,6 +158,17 @@ class DataReport:
                 for j in subsession:
                     res.append(j[i])
         return res
+    
+    def find_max_time(self):
+        whole_list = []
+        for file in self.data:
+            for line in file:
+                whole_list.append(int(line["Prescribed"]))
+        subsession_list = self.get_subsession_time()
+        for file in subsession_list:
+            whole_list+=file
+        return max(whole_list)
+
 
     def plot_detail(self):
         num_subsession = len(self.get_name()[0])
@@ -177,13 +186,14 @@ class DataReport:
             else:
                 ax[sub_sec].barh(self.file_names, time_list, color="c")
             prescribed_line = [int(self.get_prescribed(subsession_name[sub_sec]))]*len(self.file_names)
-            ax[sub_sec].plot(prescribed_line, self.file_names, color="r", linewidth=5)
+            ax[sub_sec].plot(prescribed_line, self.file_names, color="r", linewidth=3)
             ax[sub_sec].set_title(subsession_name[sub_sec])
             ax[sub_sec].xaxis.set_visible(False)
             ax[sub_sec].margins(y=0.1)
             ax[sub_sec].xaxis.set_visible(False)
             ax[sub_sec].spines[["left", "top", "right", "bottom"]].set_visible(False)
             ax[sub_sec].margins(y=0.1)
+            ax[sub_sec].axis(xmin=0,xmax=self.find_max_time())
         """ plt.subplots_adjust(
                     top=0.5) """
         export_pdf.savefig()
@@ -233,7 +243,6 @@ if __name__ == "__main__":
     print(test.get_prescribed("CA 16*.")) """
     """ print(test.get_name())
     print(test.get_subsessions()) """
-    print(test.get_name())
     with PdfPages(r'C:\Users\WorldViz.VIZBOX-03\Desktop\Charts.pdf') as export_pdf:
         test.plot_normal_line()
         test.plot_detail()
