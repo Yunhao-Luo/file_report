@@ -107,7 +107,7 @@ ax[1].margins(y=0.1)
 
 plt.show() """
 
-
+""" 
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -124,4 +124,39 @@ p = np.poly1d(z)
 line = [5]*10
 #add trendline to plot
 plt.plot(x, line)
-plt.show()
+plt.show() """
+
+from pandas import DataFrame
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
+
+
+Data1 = {'Unemployment_Rate': [6.1,5.8,5.7,5.7,5.8,5.6,5.5,5.3,5.2,5.2],
+        'Stock_Index_Price': [1500,1520,1525,1523,1515,1540,1545,1560,1555,1565]
+       }   
+df1 = DataFrame(Data1,columns=['Unemployment_Rate','Stock_Index_Price'])
+
+
+Data2 = {'Year': [1920,1930,1940,1950,1960,1970,1980,1990,2000,2010],
+        'Unemployment_Rate': [9.8,12,8,7.2,6.9,7,6.5,6.2,5.5,6.3]
+       }   
+df2 = DataFrame(Data2,columns=['Year','Unemployment_Rate'])
+
+
+with PdfPages(r'C:\Users\WorldViz.VIZBOX-03\Desktop\Charts.pdf') as export_pdf:
+  
+    plt.scatter(df1['Unemployment_Rate'], df1['Stock_Index_Price'], color='green')
+    plt.title('Unemployment Rate Vs Stock Index Price', fontsize=10)
+    plt.xlabel('Unemployment Rate', fontsize=8)
+    plt.ylabel('Stock Index Price', fontsize=8)
+    plt.grid(True)
+    export_pdf.savefig()
+    plt.close()
+      
+    plt.plot(df2['Year'], df2['Unemployment_Rate'], color='red', marker='o')
+    plt.title('Unemployment Rate Vs Year', fontsize=10)
+    plt.xlabel('Year', fontsize=8)
+    plt.ylabel('Unemployment Rate', fontsize=8)
+    plt.grid(True)
+    export_pdf.savefig()
+    plt.close()

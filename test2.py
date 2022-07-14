@@ -61,7 +61,7 @@ ax[1].xaxis.set_visible(False)
 
 plt.show() """
 
-print(3%2)
+""" print(3%2)
 
 # importing package
 from tkinter import Y
@@ -81,7 +81,7 @@ y4 = 7 #np.array([10, 29, 13, 19])
 ax[0].barh(x, y1, color='r')
 ax[0].barh(x, y2, left=y1, color='b')
 ax[0].barh(x, y3, left=y1+y2, color='r')
-ax[0].barh(x, y4, left=y1+y2+y3, color='b')
+ax[0].barh(x, y4, left=y1+y2+y3, color='b') """
 
 """ ax[1].barh(x, y1, color='r')
 ax[1].barh(x, y2, left=y1, color='b')
@@ -91,21 +91,53 @@ ax[1].yaxis.set_visible(False)
 ax[1].xaxis.set_visible(False)
 ax[1].spines[["left", "right"]].set_visible(False)
 ax[1].plot(X=20) """
-data = [23, 23, 32, 24, 12]
-ax[1].barh(["1a","1b","1c","2d","3d"], data)
-y_line = [30]*5
-x_line = [0]*5
-ax[1].plot(y_line, ["1a","1b","1c","2d","3d"], color="r")
-ax[1].set_title('testing')
-ax[1].xaxis.set_visible(False)
-ax[1].spines[["left", "top", "right", "bottom"]].set_visible(False)
 
-data = [23, 50, 32, 12, 12]
-ax[2].barh(["1a","1b","1c","2d","3d"], data)
-y_line = [30]*5
-x_line = [0]*5
-ax[2].plot(y_line, ["1a","1b","1c","2d","3d"], color="r")
-ax[2].set_title('testing')
-ax[2].xaxis.set_visible(False)
-ax[2].spines[["left", "top", "right", "bottom"]].set_visible(False)
-plt.show()
+from pandas import DataFrame
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
+
+with PdfPages(r'C:\Users\WorldViz.VIZBOX-03\Desktop\Charts.pdf') as export_pdf:
+    fig, ax = plt.subplots(5,1)
+    for i in range(0, 5):
+        data = [23, 23, 32, 24, 12]
+        ax[i].barh(["1a","1b","1c","2d","3d"], data)
+        y_line = [30]*5
+        x_line = [0]*5
+        ax[i].plot(y_line, ["1a","1b","1c","2d","3d"], color="r")
+        ax[i].set_title('testing')
+        ax[i].xaxis.set_visible(False)
+        ax[i].spines[["left", "top", "right", "bottom"]].set_visible(False)
+
+        data = [23, 50, 32, 12, 12]
+        ax[i].barh(["1a","1b","1c","2d","3d"], data)
+        y_line = [30]*5
+        x_line = [0]*5
+        ax[i].plot(y_line, ["1a","1b","1c","2d","3d"], color="r")
+        ax[i].set_title('testing')
+        ax[i].xaxis.set_visible(False)
+        ax[i].spines[["left", "top", "right", "bottom"]].set_visible(False)
+    
+    export_pdf.savefig()
+
+    fig, ax = plt.subplots(5,1)
+    for i in range(0, 5):
+        data = [23, 23, 32, 24, 12]
+        ax[i].barh(["1a","1b","1c","2d","3d"], data)
+        y_line = [30]*5
+        x_line = [0]*5
+        ax[i].plot(y_line, ["1a","1b","1c","2d","3d"], color="r")
+        ax[i].set_title('testing')
+        ax[i].xaxis.set_visible(False)
+        ax[i].spines[["left", "top", "right", "bottom"]].set_visible(False)
+
+        data = [23, 50, 32, 12, 12]
+        ax[i].barh(["1a","1b","1c","2d","3d"], data)
+        y_line = [30]*5
+        x_line = [0]*5
+        ax[i].plot(y_line, ["1a","1b","1c","2d","3d"], color="r")
+        ax[i].set_title('testing')
+        ax[i].xaxis.set_visible(False)
+        ax[i].spines[["left", "top", "right", "bottom"]].set_visible(False)
+    
+    export_pdf.savefig()
+    plt.close()

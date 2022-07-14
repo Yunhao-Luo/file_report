@@ -153,12 +153,11 @@ class DataReport:
     def plot_detail(self):
         num_subsession = len(self.get_name()[0])
         subsession_name = self.get_subsessions()
-        fig, ax = plt.subplots(int(num_subsession/11),1, figsize=(8, 200))
-        for sub_sec in range(0, int(num_subsession/11)):
+        fig, ax = plt.subplots(int(num_subsession/5),1, figsize=(8, 200))
+        for sub_sec in range(0, int(num_subsession/5)):
             time_list = self.get_individual_time(subsession_name[sub_sec])
             ax[sub_sec].barh(self.file_names, time_list)
             prescribed_line = [int(self.get_prescribed(subsession_name[sub_sec]))]*len(self.file_names)
-            print(prescribed_line)
             ax[sub_sec].plot(prescribed_line, self.file_names, color="r")
             ax[sub_sec].set_title(subsession_name[sub_sec])
             ax[sub_sec].xaxis.set_visible(False)
@@ -213,4 +212,5 @@ if __name__ == "__main__":
     print(test.get_prescribed("CA 16*.")) """
     """ print(test.get_name())
     print(test.get_subsessions()) """
+    test.plot_normal_line()
     test.plot_detail()
