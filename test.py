@@ -52,7 +52,7 @@ plt.ylabel("LifeExp", size=16)
 plt.bar_label(splot.containers[0],size=16,label_type='center')
 plt.show() """
 
-import matplotlib.pyplot as plt
+""" import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.dates as mdates
 
@@ -105,4 +105,23 @@ ax[1].spines[["left", "top", "right"]].set_visible(False)
 
 ax[1].margins(y=0.1)
 
+plt.show() """
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+#define data
+x = np.array([8, 13, 14, 15, 15, 20, 25, 30, 38, 40])
+y = np.array([5, 4, 18, 14, 20, 24, 28, 33, 30, 37])
+
+#create scatterplot
+plt.scatter(x, y)
+
+#calculate equation for quadratic trendline
+z = np.polyfit(x, y, 2)
+p = np.poly1d(z)
+line = [5]*10
+#add trendline to plot
+plt.plot(x, line)
 plt.show()

@@ -64,10 +64,12 @@ plt.show() """
 print(3%2)
 
 # importing package
+from tkinter import Y
+from turtle import width
 import matplotlib.pyplot as plt
 import numpy as np
 
-fig, ax = plt.subplots(2,1)
+fig, ax = plt.subplots(3,1)
 # create data
 x = ['A']
 y1 = 2 #np.array([10, 20, 10, 30])
@@ -81,11 +83,29 @@ ax[0].barh(x, y2, left=y1, color='b')
 ax[0].barh(x, y3, left=y1+y2, color='r')
 ax[0].barh(x, y4, left=y1+y2+y3, color='b')
 
-ax[1].barh(x, y1, color='r')
+""" ax[1].barh(x, y1, color='r')
 ax[1].barh(x, y2, left=y1, color='b')
 ax[1].barh(x, y3, left=y1+y2, color='r')
 ax[1].barh(x, y4, left=y1+y2+y3, color='b')
 ax[1].yaxis.set_visible(False)
 ax[1].xaxis.set_visible(False)
 ax[1].spines[["left", "right"]].set_visible(False)
+ax[1].plot(X=20) """
+data = [23, 23, 32, 24, 12]
+ax[1].barh(["1a","1b","1c","2d","3d"], data)
+y_line = [30]*5
+x_line = [0]*5
+ax[1].plot(y_line, ["1a","1b","1c","2d","3d"], color="r")
+ax[1].set_title('testing')
+ax[1].xaxis.set_visible(False)
+ax[1].spines[["left", "top", "right", "bottom"]].set_visible(False)
+
+data = [23, 50, 32, 12, 12]
+ax[2].barh(["1a","1b","1c","2d","3d"], data)
+y_line = [30]*5
+x_line = [0]*5
+ax[2].plot(y_line, ["1a","1b","1c","2d","3d"], color="r")
+ax[2].set_title('testing')
+ax[2].xaxis.set_visible(False)
+ax[2].spines[["left", "top", "right", "bottom"]].set_visible(False)
 plt.show()

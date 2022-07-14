@@ -1,6 +1,6 @@
 import os
 import csv
-from turtle import width
+from turtle import color, width
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.dates as mdates
@@ -59,6 +59,28 @@ class DataReport:
                     name_content[i] = ""
         return name_data
 
+    def get_subsessions(self):
+        session_data = []
+        for line in self.data[0]:
+            name = line["Name"].split(" ")[0] + " " + line["Name"].split(" ")[1]
+            session_data.append(name)
+        return session_data
+
+    def get_subsession_time(self):
+        subsession_time = []
+        for file in self.data:
+            subsession_time.append([])
+            subsession_content = subsession_time[-1]
+            for line in file:
+                subsession_content.append(line["Time"])
+        return subsession_time
+
+    def get_prescribed(self, sub_name):
+        for file in self.data:
+            for line in file:
+                if sub_name in line["Name"]:
+                    return line["Prescribed"]
+
     def get_session_time(self):
         pass
         session_time_list = []
@@ -103,7 +125,6 @@ class DataReport:
 
                 ax[file_num].margins(y=0.1)
             else:
-                # TO DO: fill bar with list of each sessions time
                 single_file_session = session_time[int(file_num/2)]
                 count = 0
                 for time in range(0, len(single_file_session)):
@@ -115,9 +136,38 @@ class DataReport:
                         count += int(single_file_session[time])
                 ax[file_num].xaxis.set_visible(False)
                 ax[file_num].spines[["left", "top", "right", "bottom"]].set_visible(False)
-                ax[file_num].margins(y=0.1)
+                ax[file_num].margins(y=0.3)
 
         plt.show()
+    
+    def get_individual_time(self, sub_name):
+        res = []
+        subsession = self.get_subsession_time()
+        subsession_name = self.get_subsessions()
+        for i in range(0, len(subsession_name)):
+            if subsession_name[i]==sub_name:
+                for j in subsession:
+                    res.append(j[i])
+        return res
+
+    def plot_detail(self):
+        num_subsession = len(self.get_name()[0])
+        subsession_name = self.get_subsessions()
+        fig, ax = plt.subplots(int(num_subsession/11),1, figsize=(8, 200))
+        for sub_sec in range(0, int(num_subsession/11)):
+            time_list = self.get_individual_time(subsession_name[sub_sec])
+            ax[sub_sec].barh(self.file_names, time_list)
+            prescribed_line = [int(self.get_prescribed(subsession_name[sub_sec]))]*len(self.file_names)
+            print(prescribed_line)
+            ax[sub_sec].plot(prescribed_line, self.file_names, color="r")
+            ax[sub_sec].set_title(subsession_name[sub_sec])
+            ax[sub_sec].xaxis.set_visible(False)
+            ax[sub_sec].margins(y=0.1)
+            ax[sub_sec].xaxis.set_visible(False)
+            ax[sub_sec].spines[["left", "top", "right", "bottom"]].set_visible(False)
+            ax[sub_sec].margins(y=0.3)
+        plt.show()
+
 
 
 
@@ -141,13 +191,26 @@ if __name__ == "__main__":
         print(len(i))
         print(i) """
 
-    test.plot_normal_line()
+    #test.plot_normal_line()
 
-    res = test.get_time()
+    """ res = test.get_subsession_time()
     for i in res:
+        print(len(i))
         print(i)
 
-    res = test.get_session_time()
-    print(res)
+    res = test.get_subsessions()
     for file in res:
+        print(len(file))
         print(file)
+    
+    res = test.get_name()
+    for file in res:
+        print(len(file))
+        print(file) """
+
+    """ test.plot_detail()
+    print(test.get_individual_time("CUF 1a."))
+    print(test.get_prescribed("CA 16*.")) """
+    """ print(test.get_name())
+    print(test.get_subsessions()) """
+    test.plot_detail()
