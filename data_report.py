@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.dates as mdates
 from matplotlib.backends.backend_pdf import PdfPages
+import sys
 
 class DataReport:
     def __init__(self, path):
@@ -240,11 +241,12 @@ class DataReport:
 
 
 if __name__ == "__main__":
-    path = os.getcwd() + "\sessionlogsforprismdatareportingproject"
-    test = DataReport(path)
-    test.read_files()
-    print(test.file_num)
-    with PdfPages(r'C:\Users\WorldViz.VIZBOX-03\Desktop\Charts.pdf') as export_pdf:
-        test.plot_normal_line()
-        test.plot_detail()
+    droppedFile = sys.argv[1]
+    path = droppedFile
+    report = DataReport(path)
+    report.read_files()
+    #with PdfPages(r'C:\Users\WorldViz.VIZBOX-03\Desktop\Charts.pdf') as export_pdf:
+    with PdfPages(droppedFile + 'Report.pdf') as export_pdf:
+        report.plot_normal_line()
+        report.plot_detail()
     plt.close
