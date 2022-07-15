@@ -206,7 +206,7 @@ class DataReport:
     def plot_detail(self):
         num_subsession = len(self.get_name()[0])
         subsession_name = self.get_subsessions()
-        fig, ax = plt.subplots(int(num_subsession),1, figsize=(15, self.file_num*21))
+        fig, ax = plt.subplots(int(num_subsession),1, figsize=(15, self.file_num*25))
         current_session = ""
         color_change = False
         session_list = []
@@ -225,15 +225,14 @@ class DataReport:
             ax[sub_sec].plot(prescribed_line, self.file_names, color="r", linewidth=3)
             ax[sub_sec].set_title(subsession_name[sub_sec][subsession_name[sub_sec].find(" ")+1:])
             if session_list[sub_sec] != "":
-                ax[sub_sec].set_title(session_list[sub_sec], loc="left")
+                ax[sub_sec].set_title(session_list[sub_sec], loc="left", fontsize=20)
             ax[sub_sec].xaxis.set_visible(False)
             ax[sub_sec].margins(y=0.1)
             ax[sub_sec].xaxis.set_visible(False)
             ax[sub_sec].spines[["left", "top", "right", "bottom"]].set_visible(False)
             ax[sub_sec].margins(y=0.1)
             ax[sub_sec].axis(xmin=0,xmax=self.find_max_time())
-        """ plt.subplots_adjust(
-                    top=0.5) """
+        plt.subplots_adjust(hspace=0.5)
         export_pdf.savefig()
         #plt.show()
 
@@ -245,8 +244,7 @@ if __name__ == "__main__":
     path = droppedFile
     report = DataReport(path)
     report.read_files()
-    #with PdfPages(r'C:\Users\WorldViz.VIZBOX-03\Desktop\Charts.pdf') as export_pdf:
-    with PdfPages(droppedFile + 'Report.pdf') as export_pdf:
+    with PdfPages(droppedFile + '_Report.pdf') as export_pdf:
         report.plot_normal_line()
         report.plot_detail()
     plt.close
