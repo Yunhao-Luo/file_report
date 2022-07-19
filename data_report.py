@@ -2,6 +2,7 @@ import os
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
 import matplotlib.dates as mdates
 from matplotlib.backends.backend_pdf import PdfPages
 from pathlib import Path
@@ -124,9 +125,9 @@ class DataReport:
 
     def plot_normal_line(self):
         time_data = self.get_time()
-        name_data = self.get_name()
+        name_data = self.get_name_start()
         for l in name_data:
-            l.insert(0, '')
+            l.append('')
         fig, ax = plt.subplots(len(self.data)*2+1,1, figsize=(15,self.file_num*1.2))
         levels = np.tile([1,1,1,1,1,1],
                  int(np.ceil(len(time_data[0])/6)))[:len(time_data[0])]
@@ -167,9 +168,9 @@ class DataReport:
                     else:
                         ec = None
                     if time%2 == 0:
-                        ax[file_num].barh(self.file_names[int((file_num-1)/2)], single_file_session[time], left = count, color='b', edgecolor=ec, hatch='//')
+                        ax[file_num].barh(self.file_names[int((file_num-1)/2)], single_file_session[time], left = count, color="#f5deb3", edgecolor=ec, hatch='//')
                     else:
-                        ax[file_num].barh(self.file_names[int((file_num-1)/2)], single_file_session[time], left = count, color='c', edgecolor=ec, hatch='//')
+                        ax[file_num].barh(self.file_names[int((file_num-1)/2)], single_file_session[time], left = count, color="#b0c4de", edgecolor=ec, hatch='//')
                     count += int(single_file_session[time])
                 ax[file_num].xaxis.set_visible(False)
                 ax[file_num].spines[["left", "top", "right", "bottom"]].set_visible(False)
@@ -286,11 +287,18 @@ class DataReport:
             current_session = subsession_name[sub_sec-offset].split(" ")[0]
             time_list = self.get_individual_time(subsession_name[sub_sec-offset])
             if color_change:
-                ax[sub_sec].barh(self.file_names, time_list, color="b")
+                ax[sub_sec].barh(self.file_names, time_list, color="#f5deb3")
             else:
-                ax[sub_sec].barh(self.file_names, time_list, color="c")
+                ax[sub_sec].barh(self.file_names, time_list, color="#b0c4de")
             prescribed_line = [int(self.get_prescribed(subsession_name[sub_sec-offset]))]*len(self.file_names)
             ax[sub_sec].plot(prescribed_line, self.file_names, color="r", linewidth=3)
+
+            for pre in prescribed_line:
+                ax[sub_sec].annotate(str(pre) + ' s', xy=(pre-(0.015*self.find_max_time()), l), color='r',
+                                xytext=(7, np.sign(l)-3), textcoords="offset points",
+                                horizontalalignment="right",
+                                verticalalignment="bottom" if l > 0 else "top")
+
             ax[sub_sec].set_title(subsession_name[sub_sec-offset][subsession_name[sub_sec-offset].find(" ")+1:], loc="left")
 
             ax[sub_sec].xaxis.set_visible(False)
@@ -319,14 +327,14 @@ class DataReport:
 
 
 if __name__ == "__main__":
-    droppedFile = sys.argv[1]
+    """ droppedFile = sys.argv[1]
     path = droppedFile
     report = DataReport(path)
-    report.read_files()
-    """ path = os.getcwd() + "\sessionlogsforprismdatareportingproject"
+    report.read_files() """
+    path = os.getcwd() + "\sessionlogsforprismdatareportingproject"
     droppedFile = path
     report = DataReport(path)
-    report.read_files() """
+    report.read_files()
     with PdfPages(droppedFile + '_Report.pdf') as export_pdf:
         report.plot_normal_line()
         report.plot_detail()
