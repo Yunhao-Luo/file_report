@@ -7,6 +7,8 @@ import matplotlib.dates as mdates
 from matplotlib.backends.backend_pdf import PdfPages
 from pathlib import Path
 from PyPDF2 import PdfFileReader, PdfFileWriter
+from matplotlib.patches import Patch
+from matplotlib.lines import Line2D
 
 class DataReport:
     def __init__(self, path):
@@ -128,7 +130,7 @@ class DataReport:
         name_data = self.get_name_start()
         for l in name_data:
             l.append('')
-        fig, ax = plt.subplots(len(self.data)*2+1,1, figsize=(15,self.file_num*1.2))
+        fig, ax = plt.subplots(len(self.data)*2+2,1, figsize=(15,self.file_num*1.5))
         levels = np.tile([1,1,1,1,1,1],
                  int(np.ceil(len(time_data[0])/6)))[:len(time_data[0])]
         session_time = self.get_session_time()
@@ -138,12 +140,12 @@ class DataReport:
                 max_total_time = sum(time)
         prese_time = self.get_pres_setime()
         
-        for file_num in range(1,len(self.data)*2+1):
-            if file_num % 2 == 1:
-                time_list = time_data[int((file_num-1)/2)]
-                name_list = name_data[int((file_num-1)/2)]
-                ax[file_num].vlines(time_list, 0, levels, color="tab:red")  # The vertical stems.
-                ax[file_num].plot(time_list, np.zeros_like(time_list), "-o",
+        for file_num in range(2,len(self.data)*2+2):
+            if file_num % 2 == 0:
+                time_list = time_data[int((file_num-2)/2)]
+                name_list = name_data[int((file_num-2)/2)]
+                ax[file_num].vlines([0]*45, 0, levels, color="tab:red")  # The vertical stems.
+                ax[file_num].plot(time_list, np.zeros_like(time_list), "-o", 
                         color="k", markerfacecolor="w")  # Baseline and markers on it.
                 # annotate lines
                 for d, l, r in zip(time_list, levels, name_list):
@@ -158,8 +160,8 @@ class DataReport:
                 ax[file_num].margins(x=0, y=0.5)
                 ax[file_num].axis(xmin=0,xmax=max_total_time)
             else:
-                single_file_session = session_time[int((file_num-1)/2)]
-                single_file_prese = prese_time[int((file_num-1)/2)]
+                single_file_session = session_time[int((file_num-2)/2)]
+                single_file_prese = prese_time[int((file_num-2)/2)]
                 count = 0
                 ec = None
                 for time in range(0, len(single_file_session)):
@@ -168,9 +170,9 @@ class DataReport:
                     else:
                         ec = None
                     if time%2 == 0:
-                        ax[file_num].barh(self.file_names[int((file_num-1)/2)], single_file_session[time], left = count, color="#f5deb3", edgecolor=ec, hatch='//')
+                        ax[file_num].barh(self.file_names[int((file_num-2)/2)], single_file_session[time], left = count, color="#f5deb3", edgecolor=ec, hatch='//')
                     else:
-                        ax[file_num].barh(self.file_names[int((file_num-1)/2)], single_file_session[time], left = count, color="#b0c4de", edgecolor=ec, hatch='//')
+                        ax[file_num].barh(self.file_names[int((file_num-2)/2)], single_file_session[time], left = count, color="#b0c4de", edgecolor=ec, hatch='//')
                     count += int(single_file_session[time])
                 ax[file_num].xaxis.set_visible(False)
                 ax[file_num].spines[["left", "top", "right", "bottom"]].set_visible(False)
@@ -182,23 +184,31 @@ class DataReport:
             timeline.append(current)
             name.append(str(current) + ' s')
             current += 30
-        ax[0].vlines(timeline, 0, levels, color="tab:red")  # The vertical stems.
-        ax[0].plot(timeline, np.zeros_like(timeline), "-o",
+        ax[1].vlines(timeline, 0, levels, color="tab:red")  # The vertical stems.
+        ax[1].plot(timeline, np.zeros_like(timeline), "-o",
                 color="k", markerfacecolor="w")  # Baseline and markers on it.
         # annotate lines
         for d, l, r in zip(timeline, levels, name):
-            ax[0].annotate(r, xy=(d, l),
+            ax[1].annotate(r, xy=(d, l),
                         xytext=(7, np.sign(l)-3), textcoords="offset points",
                         horizontalalignment="right",
                         verticalalignment="bottom" if l > 0 else "top")
         # remove y axis and spines
-        ax[0].yaxis.set_visible(False)
-        ax[0].xaxis.set_visible(False)
-        ax[0].spines[["left", "top", "right", "bottom"]].set_visible(False)
-        ax[0].margins(x=0, y=2)
-        ax[0].axis(xmin=0,xmax=max_total_time)
-        ax[0].set_title("Summary",fontsize=25)
+        ax[1].yaxis.set_visible(False)
+        ax[1].xaxis.set_visible(False)
+        ax[1].spines[["left", "top", "right", "bottom"]].set_visible(False)
+        ax[1].margins(x=0, y=2)
+        ax[1].axis(xmin=0,xmax=max_total_time)
         
+        ax[0].set_title("Summary",fontsize=25)
+        ax[0].axis('off')
+
+        legend_elements = [Line2D([0], [0], marker='o', color='black', label='recorded event',
+                          markerfacecolor='white', markersize=8),
+                        Patch(facecolor='#f5deb3', edgecolor='r', hatch='//',
+                        label='exceeded prescribed time')]
+        ax[0].legend(ncol=3, handles=legend_elements, loc='center')
+
         export_pdf.savefig()
         #plt.show()
     
@@ -241,7 +251,7 @@ class DataReport:
     def plot_detail(self):
         num_subsession = len(self.get_name()[0])
         subsession_name = self.get_subsessions()
-        fig, ax = plt.subplots(int(num_subsession)+len(self.session_names),1, figsize=(15, self.file_num*25))
+        fig, ax = plt.subplots(int(num_subsession)+len(self.session_names)*2,1, figsize=(15, self.file_num*25))
         #fig.tight_layout()
         current_session = ""
         color_change = False
@@ -251,6 +261,11 @@ class DataReport:
         for i in range(len(session_list)):
             if session_list[i] != "":
                 session_list.insert(i+1, "")
+                session_list.insert(i+1, "")
+        session_list.insert(0, "")
+        for i in range(1,len(session_list)):
+            if session_list[i]!="":
+                session_list[i-1] = "space"
         levels = np.tile([1,1,1,1,1,1],
                  int(np.ceil(len(self.get_time()[0])/6)))[:len(self.get_time()[0])]
         timeline, name, current = [], [], 0
@@ -260,7 +275,11 @@ class DataReport:
             current += 1
         offset = 0
         name_count = 0
-        for sub_sec in range(0, int(num_subsession)+len(self.session_names)):
+        for sub_sec in range(0, int(num_subsession)+len(self.session_names)*2):
+            if session_list[sub_sec] == "space":
+                ax[sub_sec].axis('off')
+                offset+=1
+                continue
             if session_list[sub_sec] != "":
                 offset+=1
                 ax[sub_sec].vlines(timeline, 0, levels, color="tab:red")  # The vertical stems.
@@ -282,6 +301,7 @@ class DataReport:
                 if name_count < len(self.session_names)-1:
                     name_count+=1
                 continue
+
             if current_session != subsession_name[sub_sec-offset].split(" ")[0]:
                 color_change = not color_change
             current_session = subsession_name[sub_sec-offset].split(" ")[0]
@@ -328,7 +348,7 @@ class DataReport:
 
 if __name__ == "__main__":
     """ droppedFile = sys.argv[1]
-    path = droppedFile
+    path = droppedFilef
     report = DataReport(path)
     report.read_files() """
     path = os.getcwd() + "\sessionlogsforprismdatareportingproject"
